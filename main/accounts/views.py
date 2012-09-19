@@ -131,7 +131,9 @@ def shib_login(request):
 
         else:
             #User already exists, so log him/her in
-            auth_login(request, User.objects.get(username=shib['REMOTE_USER']))
+            user = User.objects.get(username=shib['REMOTE_USER'])
+            user.backend = "Shibboleth"
+            auth_login(request, user)
             messages.add_message(request,message.SUCCESS, 'You have successfully logged in!')
 
     else:
