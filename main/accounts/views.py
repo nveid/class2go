@@ -14,11 +14,13 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import redirect, render_to_response
 from django.contrib.auth import logout
 from django.views.decorators.http import require_POST
-from django.contrib.auth import REDIRECT_FIELD_NAME, login as auth_login, logout as auth_logout
+from django.contrib.auth import REDIRECT_FIELD_NAME, login as auth_login, logout as auth_logout, authenticate as auth_authenticate
 from django.contrib import messages
 from django.contrib.auth.models import User, Group
 from c2g.models import Course, Institution
 from accounts.forms import *
+from registration import signals
+
 import random
 import os
 import base64
@@ -111,7 +113,7 @@ def shib_login(request):
             User.objects.create_user(shib['REMOTE_USER'], shib['mail'], password)
             # authenticate() always has to be called before login(), and
             # will return the user we just created.
-            new_user = authenticate(username=shib['REMOTE_USER'], password=password)
+            new_user = auth_authenticate(username=shib['REMOTE_USER'], password=password)
 
             new_user.first_name, new_user.last_name = shib['givenName'].capitalize(), shib['sn'],capitalize()
             new_user.save()
@@ -121,7 +123,7 @@ def shib_login(request):
                 profile.institution.add(Institution.objects.get(title='Stanford'))
                 profile.save()
         
-            login(request, new_user)
+            auth_login(request, new_user)
 
             signals.user_registered.send(sender=self.__class__,
                              user=new_user,
@@ -129,7 +131,7 @@ def shib_login(request):
 
         else:
             #User already exists, so log him/her in
-            login(request, User.objects.get(username=shib['REMOTE_USER']))
+            auth_login(request, User.objects.get(username=shib['REMOTE_USER']))
             messages.add_message(request,message.SUCCESS, 'You have successfully logged in!')
 
     else:
