@@ -108,7 +108,7 @@ def shib_login(request):
             ALPHABET = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
             rg = random.SystemRandom(random.randint(0,100000))
             password = (''.join(rg.choice(ALPHABET) for i in range(16))) + '1' #create a random password, which they will never use
-            User.objects.create_user(shib['REMOTE_USER'], shib['mail'], shib[''], password)
+            User.objects.create_user(shib['REMOTE_USER'], shib['mail'], password)
             # authenticate() always has to be called before login(), and
             # will return the user we just created.
             new_user = authenticate(username=shib['REMOTE_USER'], password=password)
