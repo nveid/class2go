@@ -134,7 +134,7 @@ def shib_login(request):
             user = User.objects.get(username=shib['REMOTE_USER'])
             user.backend = "Shibboleth"
             auth_login(request, user)
-            messages.add_message(request,message.SUCCESS, 'You have successfully logged in!')
+            messages.add_message(request,messages.SUCCESS, 'You have successfully logged in!')
 
     else:
         messages.add_message(request,messages.ERROR, 'WebAuth did not return your identity to us!  Please try logging in again.  If the problem continues please contact class2go-support@cs.stanford.edu')
