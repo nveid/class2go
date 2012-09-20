@@ -14,7 +14,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import redirect, render_to_response
 from django.contrib.auth import logout
 from django.views.decorators.http import require_POST
-from django.contrib.auth import REDIRECT_FIELD_NAME, login as auth_login, logout as auth_logout, authenticate as auth_authenticate
+from django.contrib.auth import get_backends, REDIRECT_FIELD_NAME, login as auth_login, logout as auth_logout, authenticate as auth_authenticate
 from django.contrib import messages
 from django.contrib.auth.models import User, Group
 from c2g.models import Course, Institution
@@ -132,7 +132,7 @@ def shib_login(request):
         else:
             #User already exists, so log him/her in
             user = User.objects.get(username=shib['REMOTE_USER'])
-            user.backend = "Shibboleth"
+            user.backend = 'django.contrib.auth.backends.ModelBackend'
             auth_login(request, user)
             messages.add_message(request,messages.SUCCESS, 'You have successfully logged in!')
 
