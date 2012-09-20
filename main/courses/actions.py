@@ -190,7 +190,7 @@ def is_member_of_course(course, user):
 @csrf_protect
 def signup_with_course(request, course_prefix, course_suffix):
     course = request.common_page_data['course']
-    if course.institution_only and (course.institution not in request.user.get_profile().institutions):
+    if course.institution_only and (course.institution not in request.user.get_profile().institutions.all()):
         messages.add_message(request,messages.ERROR, 'Registration in this course is restricted to ' + course.institution.title + '.  Perhaps you need to logout and login with your '+ course.institution.title + ' credentials?')
         return redirect(reverse('courses.views.main',args=[course_prefix,course_suffix]))
 
