@@ -81,8 +81,7 @@
             {% else %}
                 {% if common_page_data.ready_course.institution_only %}
                 <li class="hidden-phone">
-                    <form id="shib_login" method="POST" action="{% url 'shib_login' %}?next={{ request.get_full_path }}">{% csrf_token %}<input class="btn" type="submit" value="Login">
-                    </form>
+                    <a id="login_button" class="btn" href="{% url 'shib_login' %}?next={{ request.get_full_path }}">Login</a>
                 </li>
                 {% else %}
                 <li class="hidden-phone"><a id="login_button" class="btn" href="{% url 'auth_login' %}?next={{ request.get_full_path }}">Login</a></li>

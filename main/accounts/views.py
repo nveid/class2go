@@ -72,8 +72,6 @@ def register(request, template_name='accounts/register.html'):
     });
     return HttpResponse(t.render(c))
 
-@require_POST
-@csrf_protect
 @never_cache
 def shib_login(request):
     
@@ -115,7 +113,7 @@ def shib_login(request):
             # will return the user we just created.
             new_user = auth_authenticate(username=shib['REMOTE_USER'], password=password)
 
-            new_user.first_name, new_user.last_name = shib['givenName'].capitalize(), shib['sn'],capitalize()
+            new_user.first_name, new_user.last_name = str.capitalize(shib['givenName'].capitalize(), shib['sn'].capitalize()
             new_user.save()
                 
             profile = new_user.get_profile()
