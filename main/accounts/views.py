@@ -99,6 +99,7 @@ def shib_login(request):
         shib = {'givenName':'',
                 'sn':'',
                 'mail':'',
+                'affiliation':'',
                 'Shib-Identity-Provider':'',}
         
         shib.update(request.META)
@@ -117,7 +118,9 @@ def shib_login(request):
             new_user.save()
                 
             profile = new_user.get_profile()
-            if shib['Shib-Identity-Provider'] in ('https://idp-dev.stanford.edu/','https://idp.stanford.edu/'):
+            profile.site_data = shib['affiliation']
+            
+            if 'stanford.edu' in shib['affiliation']:
                 profile.institutions.add(Institution.objects.get(title='Stanford'))
                 profile.save()
         
