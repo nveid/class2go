@@ -118,7 +118,7 @@ def shib_login(request):
                 
             profile = new_user.get_profile()
             if shib['Shib-Identity-Provider'] in ('https://idp-dev.stanford.edu/','https://idp.stanford.edu/'):
-                profile.institution.add(Institution.objects.get(title='Stanford'))
+                profile.institutions.add(Institution.objects.get(title='Stanford'))
                 profile.save()
         
             auth_login(request, new_user)
