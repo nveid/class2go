@@ -126,7 +126,7 @@ def shib_login(request):
         
             auth_login(request, new_user)
 
-            signals.user_registered.send(sender=self.__class__,
+            signals.user_registered.send(sender=__file__,
                              user=new_user,
                              request=request)
 
